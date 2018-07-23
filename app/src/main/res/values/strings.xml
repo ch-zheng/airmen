@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">Airmen</string>
+    <string name="lorem_ipsum">Lorem Ipsum</string>
+    <!-- Main menu activity -->
+    <string name="create_game">Create Game</string>
+    <string name="join_game">Join Game</string>
+    <!-- Server browser activity -->
+    <string name="server_browser">Server Browser</string>
+    <!-- Lobby activities -->
+    <string name="lobby">Lobby</string>
+    <!-- Review activity -->
+    <string name="postgame">Postgame</string>
+    <string name="game_over">Game Over</string>
+    <string name="finish">Finish</string>
+    <!-- Roles -->
+    <string name="pilot">Pilot</string>
+    <string name="bombardier">Bombardier</string>
+    <string name="navigator">Navigator</string>
+    <string name="signaller">Signaller</string>
+    <string-array name="roles_array">
+        <item>NO ROLE</item>
+        <item>Pilot</item>
+        <item>Bombardier</item>
+        <item>Navigator</item>
+        <item>Signaller</item>
+    </string-array>
+    <!-- Pilot Activity -->
+    <string name="throttle">Throttle</string>
+    <string name="airspeed">Airspeed</string>
+    <string name="altimeter">Altimeter</string>
+    <string name="altitude">Altitude</string>
+    <string name="compass">Compass</string>
+    <string name="rotation">Rotation</string>
+    <string name="engines">Engines</string>
+    <string name="landing_gear">Landing Gear</string>
+    <string name="roll">Roll</string>
+    <string name="eject">Eject</string>
+    <!-- Miscellaneous UI -->
+    <string name="port">Port</string>
+    <string name="set">Set</string>
+    <string name="cancel">Cancel</string>
+    <!-- Error messages -->
+    <string name="connection_error">Connection Error</string>
+    <!-- LEGACY STRINGS -->
+    <string name="fake_figure">420</string>
+    <string name="placeholder">Placeholder</string>
+    <string name="begin">Begin</string>
+</resources>
