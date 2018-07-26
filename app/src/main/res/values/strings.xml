@@ -35,6 +35,20 @@
     <string name="landing_gear">Landing Gear</string>
     <string name="roll">Roll</string>
     <string name="eject">Eject</string>
+    <!-- Bombardier Activity -->
+    <string name="bombsight">Bombsight</string>
+    <string name="height">Height</string>
+    <string name="distance">Distance</string>
+    <string name="windspeed">Windspeed</string>
+    <string name="wind_direction">Wind Direction</string>
+    <string name="arm_explosives">Arm Explosives</string>
+    <string name="launch">Launch</string>
+    <!-- Navigator Activity -->
+    <string name="coordinates">Coordinates</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="elevation">Elevation</string>
+    <!-- Signaller Activity -->
     <!-- Miscellaneous UI -->
     <string name="port">Port</string>
     <string name="set">Set</string>
@@ -42,7 +56,7 @@
     <!-- Error messages -->
     <string name="connection_error">Connection Error</string>
     <!-- LEGACY STRINGS -->
-    <string name="fake_figure">420</string>
+    <string name="fake_figure">000</string>
     <string name="placeholder">Placeholder</string>
     <string name="begin">Begin</string>
 </resources>

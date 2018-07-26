@@ -20,11 +20,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.chzheng.airmen.memos.BombardierMemo;
-import com.chzheng.airmen.memos.NavigatorMemo;
-import com.chzheng.airmen.memos.PilotMemo;
 import com.chzheng.airmen.memos.ServerMemo;
-import com.chzheng.airmen.memos.SignallerMemo;
 import com.chzheng.airmen.networking.Client;
 import com.chzheng.airmen.networking.Server;
 
@@ -71,7 +67,7 @@ public class LobbyOwnerActivity extends AppCompatActivity implements WifiP2pList
         mListView.setAdapter(new AddressListAdapter(this, null));
         //Server-Client setup
         final int PORT = getIntent().getIntExtra(Integer.toString(R.id.port), 1716);
-        new Thread(new Server(getApplicationContext(), PORT)).start();
+        new Thread(new Server(PORT)).start();
         new Thread(new Runnable() {
             @Override
             public void run() {

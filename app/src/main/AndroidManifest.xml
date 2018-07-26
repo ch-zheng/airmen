@@ -22,14 +22,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BombardierActivity" />
-        <activity android:name=".LobbyActivity" />
-        <activity android:name=".LobbyOwnerActivity" />
-        <activity android:name=".NavigatorActivity" />
-        <activity android:name=".PilotActivity" />
-        <activity android:name=".ReviewActivity" />
-        <activity android:name=".ServerBrowserActivity" />
-        <activity android:name=".SignallerActivity"></activity>
+        <activity android:name=".BombardierActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".LobbyActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".LobbyOwnerActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".NavigatorActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".PilotActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ReviewActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ServerBrowserActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SignallerActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

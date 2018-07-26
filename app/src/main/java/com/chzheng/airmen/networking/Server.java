@@ -1,13 +1,11 @@
 package com.chzheng.airmen.networking;
 
-import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
 
 import com.chzheng.airmen.GameModel;
-import com.chzheng.airmen.R;
 import com.chzheng.airmen.memos.BombardierMemo;
 import com.chzheng.airmen.memos.NavigatorMemo;
 import com.chzheng.airmen.memos.PilotMemo;
@@ -26,13 +24,11 @@ public class Server implements Runnable {
     private static final String TAG = "Server";
     public static Handler sHandler;
     private HandlerThread mHandlerThread = new HandlerThread(TAG);
-    private Context mContext;
     private int mServerPort;
     private LinkedHashMap<Socket, ObjectOutputStream> mClients = new LinkedHashMap<>();
     private final GameModel mGameState = new GameModel();
 
-    public Server(Context context, int port) {
-        mContext = context;
+    public Server(int port) {
         mServerPort = port;
         mHandlerThread.start();
         //Register Handler
@@ -40,7 +36,13 @@ public class Server implements Runnable {
             @Override
             public boolean handleMessage(Message msg) {
                 if (msg.obj instanceof PilotMemo) {
-                    mGameState.addMessage(((PilotMemo) msg.obj).getMessage());
+                    final PilotMemo memo = (PilotMemo) msg.obj;
+                    final GameModel.Bomber bomber = mGameState.getProtagonist();
+                    bomber.setAirspeed = memo.airspeed;
+                    bomber.setAltitude = memo.altitude;
+                    bomber.setDirection = memo.direction;
+                    bomber.setEngines = memo.enginesOn;
+                    bomber.setLandingGear = memo.landingGearDeployed;
                 } else if (msg.obj instanceof BombardierMemo) {
                     mGameState.addMessage(((BombardierMemo) msg.obj).getMessage());
                 } else if (msg.obj instanceof NavigatorMemo) {
@@ -114,6 +116,7 @@ public class Server implements Runnable {
         } catch(IOException e) {
             Log.e(TAG, e.getMessage(), e);
         } finally {
+            Log.i(TAG, "Shutdown");
             mHandlerThread.quitSafely();
             sendToClients(new ServerMemo(ServerMemo.Action.SHUTDOWN));
             try {

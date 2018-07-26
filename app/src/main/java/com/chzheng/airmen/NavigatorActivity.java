@@ -1,42 +1,44 @@
 package com.chzheng.airmen;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.ListView;
 
-import com.chzheng.airmen.memos.NavigatorMemo;
+import com.chzheng.airmen.databinding.ActivityNavigatorBinding;
 import com.chzheng.airmen.memos.ServerMemo;
 import com.chzheng.airmen.memos.UpdateMemo;
-import com.chzheng.airmen.networking.ClientSender;
-
-import java.util.ArrayList;
+import com.chzheng.airmen.views.MapView;
 
 public class NavigatorActivity extends AppCompatActivity {
     private static final String TAG = "Navigator Activity";
     public static Handler sHandler = new Handler(Looper.getMainLooper());
-    private ListView mListView;
+    private ActivityNavigatorBinding mBinding;
+    private long mLastUpdateTime = System.currentTimeMillis();
+    private MapView mMapView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_navigator);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setTitle(R.string.navigator);
-        mListView = findViewById(R.id.list);
-        mListView.setAdapter(new TestAdapter(this, null));
-        //Register Handler
+        mMapView = findViewById(R.id.map);
+        //Handler registration
         sHandler = new Handler(getMainLooper(), new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
                 if (msg.obj instanceof UpdateMemo) {
-                    final ArrayList<String> messages = ((UpdateMemo) msg.obj).getMessages();
-                    mListView.setAdapter(new TestAdapter(NavigatorActivity.this, messages));
+                    final UpdateMemo memo = (UpdateMemo) msg.obj;
+                    if (System.currentTimeMillis() - mLastUpdateTime > 100) {
+                        mBinding.setUpdate(memo);
+                        mMapView.setUpdate(memo);
+                        mLastUpdateTime = System.currentTimeMillis();
+                    }
                 } else if (msg.obj instanceof ServerMemo) {
                     final ServerMemo memo = (ServerMemo) msg.obj;
                     switch (memo.getAction()) {
@@ -48,12 +50,5 @@ public class NavigatorActivity extends AppCompatActivity {
                 return false;
             }
         });
-    }
-
-    //Button method
-    public void sendMessage(View view) {
-        Message message = new Message();
-        message.obj = new NavigatorMemo("Navigator message");
-        ClientSender.sHandler.sendMessage(message);
     }
 }

@@ -3,11 +3,19 @@ package com.chzheng.airmen.memos;
 import java.io.Serializable;
 
 public class PilotMemo implements Serializable {
-    private String message = null;
-    public PilotMemo(String message) {
-        this.message = message;
-    }
-    public String getMessage() {
-        return message;
+    public int airspeed, altitude, direction;
+    public boolean enginesOn, landingGearDeployed;
+    public PilotMemo(
+            int airspeed,
+            int altitude,
+            int direction,
+            boolean enginesOn,
+            boolean landingGearDeployed
+    ) {
+        this.airspeed = airspeed;
+        this.altitude = altitude;
+        this.direction = direction;
+        this.enginesOn = enginesOn;
+        this.landingGearDeployed = landingGearDeployed;
     }
 }

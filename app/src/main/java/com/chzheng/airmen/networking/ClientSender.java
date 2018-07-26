@@ -33,7 +33,7 @@ public class ClientSender extends HandlerThread {
             public boolean handleMessage(Message msg) {
                 //Forward message to the server
                 if (msg.obj instanceof Serializable) {
-                    try {toServerStream.writeObject(msg.obj);}
+                    try { toServerStream.writeObject(msg.obj); }
                     catch (IOException e) {Log.e(TAG, e.getMessage(), e);}
                 }
                 return false;
@@ -43,7 +43,7 @@ public class ClientSender extends HandlerThread {
 
     @Override
     public boolean quitSafely() {
-        try {toServerStream.close();}
+        try { toServerStream.close(); }
         catch (IOException e) {Log.e(TAG, e.getMessage(), e);}
         return super.quitSafely();
     }

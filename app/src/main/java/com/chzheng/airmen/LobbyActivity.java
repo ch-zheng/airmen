@@ -44,8 +44,6 @@ public class LobbyActivity extends AppCompatActivity {
                         case ROLE:
                             final String[] roles = getResources().getStringArray(R.array.roles_array);
                             final String assignment = (String) memo.getData();
-                            Log.d(TAG, roles.toString()); //DEBUGGING
-                            Log.d(TAG, assignment); //DEBUGGING
                             Class activity = MainActivity.class;
                             if (assignment.equals(roles[1])) activity = PilotActivity.class;
                             else if (assignment.equals(roles[2])) activity = BombardierActivity.class;
