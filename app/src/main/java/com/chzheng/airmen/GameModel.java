@@ -103,23 +103,33 @@ public class GameModel implements Serializable {
         public Map(int length, int width) {
             this.length = length;
             this.width = width;
-            //Generate altitude table
             elevationTable = new int[length][width];
             Random random = new Random();
+            elevationTable[0][0] = 500;
             for (int row = 0; row < elevationTable.length; row++) {
                 for (int column = 0; column < elevationTable[0].length; column++) {
-                    int reference = 0, result;
-                    //Pick a reference point
-                    if (column > 0) reference = elevationTable[row][column -1];
-                    else if (row > 0) reference = elevationTable[row - 1][column];
-                    //Determine the offset
-                    final int triCoin = random.nextInt(3);
-                    if (triCoin == 0) result = reference + ELEVATION_DIFFERENTIAL;
-                    else if (triCoin == 1) result = reference - ELEVATION_DIFFERENTIAL;
-                    else result = reference;
-                    //Certify result
-                    if (result < 0) result = 0;
-                    else if (result > 900) result = 900;
+                    if (row == 0 && column == 0) continue;
+                    //Get adjacent tiles
+                    int sum = 0, n = 0;
+                    for (int rowOffset = -1; rowOffset <= 1; rowOffset++) {
+                        for (int columnOffset = -1; columnOffset <= 1; columnOffset++) {
+                            if (rowOffset == -1 || (rowOffset == 0 && columnOffset == -1)) {
+                                //Tile is initialized
+                                try {
+                                    sum += elevationTable[row + rowOffset][column + columnOffset];
+                                    n++;
+                                } catch (ArrayIndexOutOfBoundsException e) {}
+                            }
+                        }
+                    }
+                    int average = sum / n;
+                    int result;
+                    do {
+                        result = random.nextInt(average + ELEVATION_DIFFERENTIAL * 2 + 1);
+                    } while (result < average - ELEVATION_DIFFERENTIAL * 2);
+                    result = (int) Math.round((float) result / 100.0) * 100;
+                    if (result > 1000) result = 1000;
+                    else if (result < 0) result = 0;
                     elevationTable[row][column] = result;
                 }
             }
