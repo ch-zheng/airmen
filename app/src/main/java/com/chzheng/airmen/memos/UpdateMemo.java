@@ -1,6 +1,7 @@
 package com.chzheng.airmen.memos;
 
-import com.chzheng.airmen.GameModel;
+import com.chzheng.airmen.game.Map;
+import com.chzheng.airmen.game.Player;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,13 +17,14 @@ public class UpdateMemo implements Serializable {
     //Signaller
     public ArrayList<String> messages;
 
-    public UpdateMemo(GameModel.Bomber bomber, GameModel.Map map) {
-        airspeed = (int) bomber.airspeed;
-        altitude = (int) bomber.altitude;
-        direction = (int) bomber.direction;
-        latitude = (float) bomber.latitude;
-        longitude = (float) bomber.longitude;
+    public UpdateMemo(Player player, Map map, ArrayList<String> messages) {
+        airspeed = (int) player.getAirspeed();
+        altitude = (int) player.getAltitude();
+        direction = (int) player.getDirection();
+        latitude = (float) player.getCoordinates().getLatitude();
+        longitude = (float) player.getCoordinates().getLongitude();
         elevationTable = map.getElevationTable();
-        elevation = map.getElevation((int) latitude, (int) longitude);
+        elevation = map.getElevation(player.getCoordinates());
+        this.messages = messages;
     }
 }

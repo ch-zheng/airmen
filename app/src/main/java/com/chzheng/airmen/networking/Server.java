@@ -5,12 +5,10 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
 
-import com.chzheng.airmen.GameModel;
-import com.chzheng.airmen.memos.BombardierMemo;
-import com.chzheng.airmen.memos.NavigatorMemo;
+import com.chzheng.airmen.game.Game;
+import com.chzheng.airmen.game.Player;
 import com.chzheng.airmen.memos.PilotMemo;
 import com.chzheng.airmen.memos.ServerMemo;
-import com.chzheng.airmen.memos.SignallerMemo;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -26,7 +24,7 @@ public class Server implements Runnable {
     private HandlerThread mHandlerThread = new HandlerThread(TAG);
     private int mServerPort;
     private LinkedHashMap<Socket, ObjectOutputStream> mClients = new LinkedHashMap<>();
-    private final GameModel mGameState = new GameModel();
+    private final Game mGameState = new Game();
 
     public Server(int port) {
         mServerPort = port;
@@ -37,14 +35,13 @@ public class Server implements Runnable {
             public boolean handleMessage(Message msg) {
                 if (msg.obj instanceof PilotMemo) {
                     final PilotMemo memo = (PilotMemo) msg.obj;
-                    final GameModel.Bomber bomber = mGameState.getProtagonist();
-                    bomber.setAirspeed = memo.airspeed;
-                    bomber.setAltitude = memo.altitude;
-                    bomber.setDirection = memo.direction;
-                    bomber.setEngines = memo.enginesOn;
-                    bomber.setLandingGear = memo.landingGearDeployed;
-                } else if (msg.obj instanceof BombardierMemo) {
-                    //TODO
+                    final Player player = mGameState.getPlayer();
+                    player.setAirspeed(memo.airspeed);
+                    player.setAltitude(memo.altitude);
+                    player.setDirection(memo.direction);
+                    player.setEngines(memo.enginesOn);
+                    player.setLandingGear(memo.landingGearDeployed);
+                //} else if (msg.obj instanceof BombardierMemo) {
                 //} else if (msg.obj instanceof NavigatorMemo) {
                 //} else if (msg.obj instanceof SignallerMemo) {
                 } else if (msg.obj instanceof ServerMemo) {
@@ -88,7 +85,7 @@ public class Server implements Runnable {
         Log.i(TAG, "Server started");
         try (ServerSocket serverSocket = new ServerSocket(mServerPort)) {
             //Client connections
-            while(mClients.size() < 1 && !Thread.interrupted()) { //DEBUGGING: Lobby size modification
+            while(mClients.size() < 2 && !Thread.interrupted()) { //DEBUGGING: Lobby size modification
                 final Socket clientSocket = serverSocket.accept();
                 new Thread(new ServerListener(clientSocket)).start();
                 mClients.put(clientSocket, new ObjectOutputStream(clientSocket.getOutputStream()));
