@@ -44,11 +44,9 @@ public class Server implements Runnable {
                     bomber.setEngines = memo.enginesOn;
                     bomber.setLandingGear = memo.landingGearDeployed;
                 } else if (msg.obj instanceof BombardierMemo) {
-                    mGameState.addMessage(((BombardierMemo) msg.obj).getMessage());
-                } else if (msg.obj instanceof NavigatorMemo) {
-                    mGameState.addMessage(((NavigatorMemo) msg.obj).getMessage());
-                } else if (msg.obj instanceof SignallerMemo) {
-                    mGameState.addMessage(((SignallerMemo) msg.obj).getMessage());
+                    //TODO
+                //} else if (msg.obj instanceof NavigatorMemo) {
+                //} else if (msg.obj instanceof SignallerMemo) {
                 } else if (msg.obj instanceof ServerMemo) {
                     final ServerMemo memo = (ServerMemo) msg.obj;
                     switch (memo.getAction()) {
@@ -87,9 +85,10 @@ public class Server implements Runnable {
 
     @Override
     public void run() {
+        Log.i(TAG, "Server started");
         try (ServerSocket serverSocket = new ServerSocket(mServerPort)) {
             //Client connections
-            while(mClients.size() < 2 && !Thread.interrupted()) { //DEBUGGING: Lobby size modification
+            while(mClients.size() < 1 && !Thread.interrupted()) { //DEBUGGING: Lobby size modification
                 final Socket clientSocket = serverSocket.accept();
                 new Thread(new ServerListener(clientSocket)).start();
                 mClients.put(clientSocket, new ObjectOutputStream(clientSocket.getOutputStream()));

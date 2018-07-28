@@ -12,8 +12,9 @@ public class UpdateMemo implements Serializable {
     public float latitude, longitude;
     public int[][] elevationTable;
     public int elevation;
-    //DEBUGGING
-    private ArrayList<String> messages = new ArrayList<>();
+    //Bombardier
+    //Signaller
+    public ArrayList<String> messages;
 
     public UpdateMemo(GameModel.Bomber bomber, GameModel.Map map) {
         airspeed = (int) bomber.airspeed;
@@ -24,8 +25,4 @@ public class UpdateMemo implements Serializable {
         elevationTable = map.getElevationTable();
         elevation = map.getElevation((int) latitude, (int) longitude);
     }
-
-    //DEBUGGING
-    public void setMessages(ArrayList<String> messages) { this.messages = messages; }
-    public ArrayList<String> getMessages() { return messages; }
 }

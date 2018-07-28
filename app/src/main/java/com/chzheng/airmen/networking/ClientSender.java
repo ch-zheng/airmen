@@ -14,7 +14,7 @@ import java.net.Socket;
 public class ClientSender extends HandlerThread {
     private static final String TAG = "Client sender";
     private Socket mClientSocket;
-    private ObjectOutputStream toServerStream;
+    private ObjectOutputStream mToServerStream;
     public static Handler sHandler;
 
     public ClientSender(Socket clientSocket) {
@@ -25,16 +25,16 @@ public class ClientSender extends HandlerThread {
     @Override
     protected void onLooperPrepared() {
         //Establish output stream to server
-        try {toServerStream = new ObjectOutputStream(mClientSocket.getOutputStream());}
-        catch (IOException e) {Log.e(TAG, e.getMessage(), e);}
+        try { mToServerStream = new ObjectOutputStream(mClientSocket.getOutputStream()); }
+        catch (IOException e) { Log.e(TAG, e.getMessage(), e); }
         //Register Handler
         sHandler = new Handler(getLooper(), new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
                 //Forward message to the server
                 if (msg.obj instanceof Serializable) {
-                    try { toServerStream.writeObject(msg.obj); }
-                    catch (IOException e) {Log.e(TAG, e.getMessage(), e);}
+                    try { mToServerStream.writeObject(msg.obj); }
+                    catch (IOException e) { Log.e(TAG, e.getMessage(), e); }
                 }
                 return false;
             }
@@ -43,8 +43,8 @@ public class ClientSender extends HandlerThread {
 
     @Override
     public boolean quitSafely() {
-        try { toServerStream.close(); }
-        catch (IOException e) {Log.e(TAG, e.getMessage(), e);}
+        try { mToServerStream.close(); }
+        catch (IOException e) { Log.e(TAG, e.getMessage(), e); }
         return super.quitSafely();
     }
 }

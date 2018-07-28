@@ -76,7 +76,7 @@ public class PilotActivity extends AppCompatActivity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        Message message = new Message();
+        Message message = Message.obtain();
         message.obj = new PilotMemo(
                 ((SeekBar) findViewById(R.id.slider_throttle)).getProgress(),
                 ((SeekBar) findViewById(R.id.slider_altitude)).getProgress(),

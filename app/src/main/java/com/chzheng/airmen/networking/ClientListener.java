@@ -5,9 +5,9 @@ import android.os.Message;
 import android.util.Log;
 
 import com.chzheng.airmen.BombardierActivity;
-import com.chzheng.airmen.LobbyActivity;
-import com.chzheng.airmen.LobbyOwnerActivity;
+import com.chzheng.airmen.ClientActivity;
 import com.chzheng.airmen.NavigatorActivity;
+import com.chzheng.airmen.OwnerActivity;
 import com.chzheng.airmen.PilotActivity;
 import com.chzheng.airmen.SignallerActivity;
 
@@ -33,21 +33,21 @@ public class ClientListener implements Runnable {
             }
         } catch (IOException|ClassNotFoundException e) {
             Log.e(TAG, e.getMessage() != null ? e.getMessage() : "Unknown error", e);
-            //TODO: Notify activities of server shutdown
+            sendToActivities(e);
         }
     }
 
     private void sendToActivities(Object input) {
         Handler[] activityHandlers = {
-                LobbyActivity.sHandler,
-                LobbyOwnerActivity.sHandler,
+                OwnerActivity.sHandler,
+                ClientActivity.sHandler,
                 PilotActivity.sHandler,
                 BombardierActivity.sHandler,
                 NavigatorActivity.sHandler,
                 SignallerActivity.sHandler
         };
         for (Handler handler : activityHandlers) {
-            Message message = new Message();
+            Message message = Message.obtain();
             message.obj = input;
             handler.sendMessage(message);
         }

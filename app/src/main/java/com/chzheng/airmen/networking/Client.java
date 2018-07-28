@@ -4,8 +4,8 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
 
-import com.chzheng.airmen.LobbyActivity;
-import com.chzheng.airmen.LobbyOwnerActivity;
+import com.chzheng.airmen.ClientActivity;
+import com.chzheng.airmen.OwnerActivity;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -39,12 +39,12 @@ public class Client implements Runnable {
             clientSender.quitSafely();
         } catch (IOException|InterruptedException e) {
             Log.e(TAG, e.getMessage() != null ? e.getMessage() : "Unknown error", e);
-            Message message = new Message();
+            Message message = Message.obtain();
             message.obj = e;
-            LobbyActivity.sHandler.sendMessage(message);
-            Message message2 = new Message();
+            OwnerActivity.sHandler.sendMessage(message);
+            Message message2 = Message.obtain();
             message2.obj = e;
-            LobbyOwnerActivity.sHandler.sendMessage(message2);
+            ClientActivity.sHandler.sendMessage(message2);
         } finally {
             Log.i(TAG, "Shutdown");
         }

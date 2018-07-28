@@ -1,13 +1,17 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Airmen</string>
     <string name="lorem_ipsum">Lorem Ipsum</string>
     <!-- Main menu activity -->
+    <string name="begin">Begin</string>
     <string name="create_game">Create Game</string>
     <string name="join_game">Join Game</string>
-    <!-- Server browser activity -->
+    <!-- Server browser activity (LEGACY) -->
     <string name="server_browser">Server Browser</string>
     <!-- Lobby activities -->
     <string name="lobby">Lobby</string>
+    <string name="owner">Owner</string>
+    <string name="client">Client</string>
+    <string name="standby">Standby</string>
     <!-- Review activity -->
     <string name="postgame">Postgame</string>
     <string name="game_over">Game Over</string>
@@ -41,7 +45,12 @@
     <string name="distance">Distance</string>
     <string name="windspeed">Windspeed</string>
     <string name="wind_direction">Wind Direction</string>
-    <string name="arm_explosives">Arm Explosives</string>
+    <string name="calculate">Calculate</string>
+    <string name="arm">Arm</string>
+    <string name="arming">
+        Arming&#8230; <xliff:g id="countdown">%1$d</xliff:g>
+    </string>
+    <string name="disarm">Disarm</string>
     <string name="launch">Launch</string>
     <!-- Navigator Activity -->
     <string name="coordinates">Coordinates</string>
@@ -49,14 +58,16 @@
     <string name="longitude">Longitude</string>
     <string name="elevation">Elevation</string>
     <!-- Signaller Activity -->
+    <string name="radar">Radar</string>
+    <string name="radio">Radio</string>
     <!-- Miscellaneous UI -->
     <string name="port">Port</string>
     <string name="set">Set</string>
     <string name="cancel">Cancel</string>
     <!-- Error messages -->
+    <string name="no_group_formed">No Wifi-Direct Group</string>
     <string name="connection_error">Connection Error</string>
     <!-- LEGACY STRINGS -->
     <string name="fake_figure">000</string>
     <string name="placeholder">Placeholder</string>
-    <string name="begin">Begin</string>
 </resources>

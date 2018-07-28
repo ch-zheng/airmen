@@ -12,35 +12,28 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.chzheng.airmen.memos.ServerMemo;
+import com.chzheng.airmen.networking.Client;
 
 import java.net.InetAddress;
 import java.util.LinkedHashSet;
 
-public class LobbyActivity extends AppCompatActivity {
-    private static final String TAG = "Lobby";
+public class ClientActivity extends AppCompatActivity {
+    private static final String TAG = "ClientActivity";
     public static Handler sHandler = new Handler(Looper.getMainLooper());
-    private ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lobby);
+        setContentView(R.layout.activity_client);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
-        getSupportActionBar().setTitle(R.string.lobby);
-        mListView = findViewById(R.id.list);
-        mListView.setAdapter(new AddressListAdapter(this, null));
+        getSupportActionBar().setTitle(R.string.client);
         sHandler = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
                 if (msg.obj instanceof ServerMemo) {
                     final ServerMemo memo = (ServerMemo) msg.obj;
+                    Log.d(TAG, "Received server memo");
                     switch (memo.getAction()) {
-                        case CLIENT_LIST:
-                            mListView.setAdapter(new AddressListAdapter(
-                                    LobbyActivity.this,
-                                    (LinkedHashSet<InetAddress>) ((ServerMemo) msg.obj).getData())
-                            );
-                            break;
                         case ROLE:
                             final String[] roles = getResources().getStringArray(R.array.roles_array);
                             final String assignment = (String) memo.getData();
@@ -50,18 +43,21 @@ public class LobbyActivity extends AppCompatActivity {
                             else if (assignment.equals(roles[3])) activity = NavigatorActivity.class;
                             else if (assignment.equals(roles[4])) activity = SignallerActivity.class;
                             Log.d(TAG, "Role assignment");
-                            startActivity(new Intent(LobbyActivity.this, activity));
+                            startActivity(new Intent(ClientActivity.this, activity));
                             break;
                         case SHUTDOWN:
                             Log.d(TAG, "Server shutdown");
-                            startActivity(new Intent(LobbyActivity.this, MainActivity.class));
+                            startActivity(new Intent(ClientActivity.this, MainActivity.class));
                             break;
                     }
                 } else if (msg.obj instanceof java.lang.Exception) {
-                    Toast.makeText(LobbyActivity.this, R.string.connection_error, Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(LobbyActivity.this, MainActivity.class));
+                    Toast.makeText(ClientActivity.this, R.string.connection_error, Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(ClientActivity.this, MainActivity.class));
                 }
             }
         };
+        final InetAddress address = (InetAddress) getIntent().getSerializableExtra(String.valueOf(R.id.address));
+        final int port = getIntent().getIntExtra(String.valueOf(R.id.port), -1);
+        new Thread(new Client(address, port)).start();
     }
 }

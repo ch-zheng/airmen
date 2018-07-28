@@ -1,16 +1,26 @@
 package com.chzheng.airmen;
 
+import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.DialogFragment;
+import android.net.wifi.p2p.WifiP2pInfo;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements PortDialogFragment.PortDialogListener {
+public class MainActivity extends AppCompatActivity {
+    private WifiP2pManager mWifiP2pManager;
+    private WifiP2pManager.Channel mChannel;
+    private final static int PORT = 8080;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mWifiP2pManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        mChannel = mWifiP2pManager.initialize(this, getMainLooper(), null);
     }
 
     @Override
@@ -19,22 +29,25 @@ public class MainActivity extends AppCompatActivity implements PortDialogFragmen
         //TODO: Kill running server/client instances
     }
 
-    @Override
-    public void onDialogPositiveClick(int port) {
-        Intent intent = new Intent(this, LobbyOwnerActivity.class);
-        intent.putExtra(Integer.toString(R.id.port), port);
-        startActivity(intent);
-    }
-
-    @Override
-    public void onDialogNegativeClick() {}
-
-    public void createGame(View view) {
-        DialogFragment dialog = new PortDialogFragment();
-        dialog.show(getSupportFragmentManager(), null);
-    }
-
-    public void joinGame(View view) {
-        startActivity(new Intent(this, ServerBrowserActivity.class));
+    public void begin(View view) {
+        mWifiP2pManager.requestConnectionInfo(mChannel, new WifiP2pManager.ConnectionInfoListener() {
+            @Override
+            public void onConnectionInfoAvailable(WifiP2pInfo info) {
+                if (info.groupFormed) {
+                    if (info.isGroupOwner) {
+                        Intent intent = new Intent(MainActivity.this, OwnerActivity.class);
+                        intent.putExtra(String.valueOf(R.id.port), PORT);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(MainActivity.this, ClientActivity.class);
+                        intent.putExtra(String.valueOf(R.id.port), PORT);
+                        intent.putExtra(String.valueOf(R.id.address), info.groupOwnerAddress);
+                        startActivity(intent);
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, R.string.no_group_formed, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 }

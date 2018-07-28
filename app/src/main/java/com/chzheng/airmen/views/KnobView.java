@@ -25,7 +25,6 @@ public class KnobView extends View {
     }
 
     @Override
-    //FIXME, the picture is fucked up
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         mDialImage = Bitmap.createScaledBitmap(mDialImage, canvas.getWidth(), canvas.getHeight(), false);

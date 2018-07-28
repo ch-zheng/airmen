@@ -4,4 +4,5 @@
     <item type="id" name="wifip2pdevice"/>
     <!-- Intent tags -->
     <item type="id" name="port"/>
+    <item type="id" name="address"/>
 </resources>

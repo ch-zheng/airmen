@@ -72,9 +72,6 @@ public class AddressListAdapter extends BaseAdapter {
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {}
             });
-            if (mContext instanceof LobbyActivity) {{
-                viewHolder.role.setEnabled(false);
-            }}
             convertView.setTag(R.id.viewholder, viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag(R.id.viewholder);

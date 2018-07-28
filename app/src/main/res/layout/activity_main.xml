@@ -14,11 +14,6 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/create_game"
-        android:onClick="createGame"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/join_game"
-        android:onClick="joinGame"/>
+        android:text="@string/begin"
+        android:onClick="begin"/>
 </LinearLayout>

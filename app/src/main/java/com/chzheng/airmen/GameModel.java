@@ -11,7 +11,7 @@ public class GameModel implements Serializable {
     private double mPreviousDelta = 0;
     private Map mMap = new Map(20,20);
     private Bomber mProtagonist = new Bomber();
-    private ArrayList<String> mMessages = new ArrayList<>(); //DEBUGGING
+    private ArrayList<Entity> mEntities;
 
     //Returns whether updates should continue
     public boolean update(double delta) {
@@ -22,23 +22,25 @@ public class GameModel implements Serializable {
 
     public UpdateMemo getMemo() {
         final UpdateMemo result = new UpdateMemo(mProtagonist, mMap);
-        result.setMessages(mMessages); //DEBUGGING
         return result;
-    }
-
-    //DEBUGGING
-    public void addMessage(String message) {
-        mMessages.add(message);
     }
 
     public Bomber getProtagonist() {
         return mProtagonist;
     }
 
-    public class Bomber {
+    interface Entity {
+        boolean update(double delta);
+        double getVelocity();
+        double getDirection();
+        double getLatitude();
+        double getLongitude();
+    }
+
+     public class Bomber implements Entity {
         //Measurement units: Speed is in knots, altitude in feet, and rotation in degrees clockwise from north.
         //Specifications
-        private static final int MAX_SPEED = 200, TAXI_SPEED = 20, CEILING = 1000;
+        private static final int MAX_SPEED = 200, TAXI_SPEED = 20, CEILING = 900;
         private static final int ACCELERATION = 20, TAXI_ACCELERATION = 2, RATE_OF_CLIMB = 20, RATE_OF_TURN = 6;
         private static final int DRAG = 10, GRAVITY = 10;
         //Physical variables
@@ -50,6 +52,7 @@ public class GameModel implements Serializable {
         public boolean setEngines = false, setLandingGear = true;
 
         public boolean update(double delta) {
+            //Systems toggles
             enginesEnabled = setEngines;
             landingGearDeployed = setLandingGear;
             //Movement
@@ -93,11 +96,25 @@ public class GameModel implements Serializable {
             ) return false;
             return true;
         }
-    }
 
-    public class Map {
+        //Getters
+         @Override
+         public double getVelocity() { return airspeed; }
+
+         @Override
+         public double getDirection() { return direction; }
+
+         @Override
+         public double getLatitude() { return latitude; }
+
+         @Override
+         public double getLongitude() { return longitude; }
+     }
+
+     public class Map {
         private int[][] elevationTable;
         private final int ELEVATION_DIFFERENTIAL = 100;
+        private final int MAXIMUM_ELEVATION = 800;
         private int length, width;
 
         public Map(int length, int width) {
@@ -105,7 +122,7 @@ public class GameModel implements Serializable {
             this.width = width;
             elevationTable = new int[length][width];
             Random random = new Random();
-            elevationTable[0][0] = 500;
+            elevationTable[0][0] = MAXIMUM_ELEVATION / 2;
             for (int row = 0; row < elevationTable.length; row++) {
                 for (int column = 0; column < elevationTable[0].length; column++) {
                     if (row == 0 && column == 0) continue;
@@ -127,14 +144,15 @@ public class GameModel implements Serializable {
                     do {
                         result = random.nextInt(average + ELEVATION_DIFFERENTIAL * 2 + 1);
                     } while (result < average - ELEVATION_DIFFERENTIAL * 2);
-                    result = (int) Math.round((float) result / 100.0) * 100;
-                    if (result > 1000) result = 1000;
+                    result = (int) Math.round((float) result / ELEVATION_DIFFERENTIAL) * ELEVATION_DIFFERENTIAL;
+                    if (result > MAXIMUM_ELEVATION) result = random.nextBoolean() ? MAXIMUM_ELEVATION : MAXIMUM_ELEVATION - ELEVATION_DIFFERENTIAL;
                     else if (result < 0) result = 0;
                     elevationTable[row][column] = result;
                 }
             }
         }
 
+        //Getters
         public int getLength() { return length; }
 
         public int getWidth() { return width; }
