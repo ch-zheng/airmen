@@ -1,6 +1,7 @@
 package com.chzheng.airmen;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -12,27 +13,28 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import com.chzheng.airmen.databinding.ActivityBombardierBinding;
+import com.chzheng.airmen.game.Coordinates;
 import com.chzheng.airmen.memos.BombardierMemo;
 import com.chzheng.airmen.memos.ServerMemo;
 import com.chzheng.airmen.memos.UpdateMemo;
 import com.chzheng.airmen.networking.ClientSender;
 import com.chzheng.airmen.views.KnobView;
 
-import java.util.ArrayList;
+import java.util.Locale;
 
 public class BombardierActivity extends AppCompatActivity {
     private static final String TAG = "Bombardier Activity";
     public static Handler sHandler = new Handler(Looper.getMainLooper());
+    private ActivityBombardierBinding mBinding;
     private int mCurrentRotationAngle = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bombardier);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_bombardier);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setTitle(R.string.bombardier);
         //Register Handler
@@ -59,9 +61,8 @@ public class BombardierActivity extends AppCompatActivity {
                 if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
                     final int rotationAngle = (int) ((KnobView) v).getRotationAngle();
                     mCurrentRotationAngle = rotationAngle;
-                    ((TextView) findViewById(R.id.indicator_turret_aim)).setText(String.valueOf(rotationAngle));
                     Message message = Message.obtain();
-                    message.obj = new BombardierMemo(false, false, rotationAngle);
+                    message.obj = new BombardierMemo(false, rotationAngle);
                     ClientSender.sHandler.sendMessage(message);
                     return false;
                 }
@@ -70,10 +71,13 @@ public class BombardierActivity extends AppCompatActivity {
         });
     }
 
-    public void calculateDistance(View view) {
+    public void calculate(View view) {
         final int airspeed = Integer.valueOf(((TextInputEditText) findViewById(R.id.edit_airspeed_field)).getText().toString());
         final int height = Integer.valueOf(((TextInputEditText) findViewById(R.id.edit_height_field)).getText().toString());
-        ((TextView) findViewById(R.id.indicator_distance)).setText(String.valueOf(airspeed + height)); //FIXME
+        final int bearing = Integer.valueOf(((TextInputEditText) findViewById(R.id.edit_bearing_field)).getText().toString());
+        final float latitude = Float.valueOf(((TextInputEditText) findViewById(R.id.edit_latitude_field)).getText().toString());
+        final float longitude = Float.valueOf(((TextInputEditText) findViewById(R.id.edit_longitude_field)).getText().toString());
+        mBinding.setCoordinates(new Coordinates(2, 2));
     }
 
     public void onButtonClick(View view) {
@@ -81,7 +85,7 @@ public class BombardierActivity extends AppCompatActivity {
         switch(buttonClicked.getId()) {
             case R.id.button_launch:
                 Message message = Message.obtain();
-                message.obj = new BombardierMemo(false, true, mCurrentRotationAngle);
+                message.obj = new BombardierMemo(true, mCurrentRotationAngle);
                 ClientSender.sHandler.sendMessage(message);
                 break;
             case R.id.button_arm:
@@ -94,7 +98,7 @@ public class BombardierActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    buttonClicked.setText(String.format("Working... %1$d", currentCount)); //FIXME: Proper string localization
+                                    buttonClicked.setText(String.format(Locale.ENGLISH, "Working... %1$d", currentCount));
                                 }
                             });
                             try { Thread.sleep(1000); }

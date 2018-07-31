@@ -54,9 +54,11 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
         @Override
         protected void onLooperPrepared() {
             //Canvas stuff
-            final Paint backgroundPaint = new Paint(), foregroundPaint = new Paint();
-            backgroundPaint.setColor(Color.WHITE);
+            final Paint backgroundPaint = new Paint(), foregroundPaint = new Paint(), textPaint = new Paint();
+            backgroundPaint.setColor(Color.BLACK);
             foregroundPaint.setColor(Color.RED);
+            textPaint.setColor(Color.WHITE);
+            textPaint.setTextAlign(Paint.Align.CENTER);
             final int[] elevationColors = {
                     0xFFC8E6C9, 0xFFA5D6A7, 0xFF81C784,
                     0xFF66BB6A, 0xFF4CAF50, 0xFF43A047,
@@ -67,11 +69,15 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
                 @Override
                 public boolean handleMessage(Message msg) {
                     if (msg.obj instanceof UpdateMemo) {
+                        //FIXME: 4/3 is a magical number that makes things work.
+                        //FIXME CONTINUED: It cannot be saved as a variable, it must be typed out as '4/3'.
                         final UpdateMemo memo = (UpdateMemo) msg.obj;
                         final Canvas canvas = getHolder().lockCanvas();
                         canvas.drawPaint(backgroundPaint);
-                        final float latitudeLength = canvas.getHeight() / memo.elevationTable.length;
-                        final float longitudeLength = canvas.getWidth() / memo.elevationTable[0].length;
+                        final float latitudeLength = canvas.getHeight() / (memo.elevationTable.length + 2);
+                        final float longitudeLength = canvas.getWidth() / (memo.elevationTable[0].length + 2);
+                        canvas.save();
+                        canvas.translate(longitudeLength * 4/3, latitudeLength);
                         for (int y = 0; y < memo.elevationTable.length; y++) {
                             for (int x = 0; x < memo.elevationTable[0].length; x++) {
                                 final Paint elevationPaint = new Paint();
@@ -84,9 +90,25 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
                                 );
                             }
                         }
+                        canvas.restore();
+                        //Draw coordinate markings
+                        textPaint.setTextSize(latitudeLength);
+                        for (int i = 0; i <= memo.elevationTable[0].length; i += 2) {
+                            //Longitude markings
+                            canvas.drawText(String.valueOf(i), i * longitudeLength + longitudeLength * 4/3, canvas.getHeight() - latitudeLength / 3, textPaint);
+                        }
+                        canvas.save();
+                        canvas.rotate(270, canvas.getWidth() / 2, canvas.getHeight() / 2);
+                        for (int i = 0; i <= memo.elevationTable.length; i+= 2) {
+                            //Latitude markings
+                            canvas.drawText(String.valueOf(i), i * latitudeLength + latitudeLength * 4/3, longitudeLength, textPaint);
+                        }
+                        canvas.restore();
+                        //Draw player position
                         canvas.save();
                         canvas.translate(0, canvas.getHeight());
                         canvas.scale(1, -1);
+                        canvas.translate(longitudeLength * 4/3, latitudeLength * 4/3);
                         canvas.drawCircle(memo.longitude * longitudeLength, memo.latitude * latitudeLength, latitudeLength / 2, foregroundPaint);
                         canvas.restore();
                         getHolder().unlockCanvasAndPost(canvas);

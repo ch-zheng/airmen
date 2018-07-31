@@ -3,6 +3,7 @@
     <string name="lorem_ipsum">Lorem Ipsum</string>
     <!-- Main menu activity -->
     <string name="begin">Begin</string>
+    <string name="connect">Connect</string>
     <string name="create_game">Create Game</string>
     <string name="join_game">Join Game</string>
     <!-- Server browser activity (LEGACY) -->
@@ -34,6 +35,7 @@
     <string name="altimeter">Altimeter</string>
     <string name="altitude">Altitude</string>
     <string name="compass">Compass</string>
+    <string name="bearing">Bearing</string>
     <string name="rotation">Rotation</string>
     <string name="engines">Engines</string>
     <string name="landing_gear">Landing Gear</string>
@@ -46,12 +48,14 @@
     <string name="windspeed">Windspeed</string>
     <string name="wind_direction">Wind Direction</string>
     <string name="calculate">Calculate</string>
+    <string name="distance_to_launch">Distance to Launch</string>
     <string name="arm">Arm</string>
     <string name="arming">
         Arming&#8230; <xliff:g id="countdown">%1$d</xliff:g>
     </string>
     <string name="disarm">Disarm</string>
     <string name="launch">Launch</string>
+    <string name="turret">Turret</string>
     <!-- Navigator Activity -->
     <string name="coordinates">Coordinates</string>
     <string name="latitude">Latitude</string>

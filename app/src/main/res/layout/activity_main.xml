@@ -5,15 +5,35 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_margin="16dp">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="@string/app_name"/>
+        android:text="@string/app_name"
+        style="@style/Title"/>
+    <ImageView
+        android:id="@+id/image_airplane"
+        android:layout_width="256dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/airplane"
+        android:adjustViewBounds="true"
+        android:tint="@color/colorLight"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/begin"
-        android:onClick="begin"/>
+        android:text="@string/connect"
+        android:onClick="begin"
+        android:drawableStart="@drawable/ic_play_arrow_black_24dp"
+        android:drawableEnd="@drawable/ic_play_arrow_black_24dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"/>
 </LinearLayout>

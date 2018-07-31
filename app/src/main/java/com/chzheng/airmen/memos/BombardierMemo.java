@@ -3,12 +3,11 @@ package com.chzheng.airmen.memos;
 import java.io.Serializable;
 
 public class BombardierMemo implements Serializable {
-    public boolean arm, launch;
-    public int turretDirection;
+    public boolean launch;
+    public int turretAim;
 
-    public BombardierMemo(boolean arm, boolean launch, int turretDirection) {
-        this.arm = arm;
+    public BombardierMemo(boolean launch, int turretAim) {
         this.launch = launch;
-        this.turretDirection = turretDirection;
+        this.turretAim = turretAim;
     }
 }

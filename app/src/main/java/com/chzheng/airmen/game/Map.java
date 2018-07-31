@@ -1,5 +1,6 @@
 package com.chzheng.airmen.game;
 
+import java.io.Serializable;
 import java.util.Random;
 
 public class Map {
@@ -41,6 +42,11 @@ public class Map {
                 elevationTable[row][column] = result;
             }
         }
+    }
+
+    public Coordinates getRandomLocation() {
+        Random random = new Random();
+        return new Coordinates(random.nextInt(length), random.nextInt(width));
     }
 
     //Simple getters

@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
@@ -18,6 +19,10 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:text="@string/begin"
-        android:onClick="startGame"/>
+        android:onClick="startGame"
+        android:drawableStart="@drawable/ic_play_arrow_black_24dp"
+        android:drawableEnd="@drawable/ic_play_arrow_black_24dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"/>
 </LinearLayout>

@@ -54,7 +54,6 @@ public class OwnerActivity extends AppCompatActivity {
                     final ServerMemo memo = (ServerMemo) msg.obj;
                     switch (memo.getAction()) {
                         case CLIENT_LIST:
-                            Log.d(TAG, "Client list received");
                             mListView.setAdapter(new AddressListAdapter(
                                     OwnerActivity.this,
                                     (LinkedHashSet<InetAddress>) ((ServerMemo) msg.obj).getData())
@@ -68,11 +67,9 @@ public class OwnerActivity extends AppCompatActivity {
                             else if (assignment.equals(roles[2])) activity = BombardierActivity.class;
                             else if (assignment.equals(roles[3])) activity = NavigatorActivity.class;
                             else if (assignment.equals(roles[4])) activity = SignallerActivity.class;
-                            Log.d(TAG, "Role assignment");
                             startActivity(new Intent(OwnerActivity.this, activity));
                             break;
                         case SHUTDOWN:
-                            Log.d(TAG, "Server shutdown");
                             startActivity(new Intent(OwnerActivity.this, MainActivity.class));
                             break;
                     }
@@ -86,6 +83,7 @@ public class OwnerActivity extends AppCompatActivity {
     }
 
     public void startGame(View view) {
+        Log.d(TAG, "Sending server role assignments");
         Message message = Message.obtain();
         message.obj = new ServerMemo(ServerMemo.Action.ROLE_ASSIGNMENT, ((AddressListAdapter) mListView.getAdapter()).getDataSet());
         Server.sHandler.sendMessage(message);

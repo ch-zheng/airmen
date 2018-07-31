@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.chzheng.airmen.game.Game;
 import com.chzheng.airmen.game.Player;
+import com.chzheng.airmen.memos.BombardierMemo;
 import com.chzheng.airmen.memos.PilotMemo;
 import com.chzheng.airmen.memos.ServerMemo;
 
@@ -15,6 +16,7 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.ServerSocket;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
@@ -23,7 +25,7 @@ public class Server implements Runnable {
     public static Handler sHandler;
     private HandlerThread mHandlerThread = new HandlerThread(TAG);
     private int mServerPort;
-    private LinkedHashMap<Socket, ObjectOutputStream> mClients = new LinkedHashMap<>();
+    private volatile LinkedHashMap<Socket, ObjectOutputStream> mClients = new LinkedHashMap<>();
     private final Game mGameState = new Game();
 
     public Server(int port) {
@@ -38,10 +40,13 @@ public class Server implements Runnable {
                     final Player player = mGameState.getPlayer();
                     player.setAirspeed(memo.airspeed);
                     player.setAltitude(memo.altitude);
-                    player.setDirection(memo.direction);
+                    player.setBearing(memo.direction);
                     player.setEngines(memo.enginesOn);
                     player.setLandingGear(memo.landingGearDeployed);
-                //} else if (msg.obj instanceof BombardierMemo) {
+                } else if (msg.obj instanceof BombardierMemo) {
+                    final BombardierMemo memo = (BombardierMemo) msg.obj;
+                    if (memo.launch) mGameState.getPlayer().launch();
+                    mGameState.getPlayer().setTurretAim(memo.turretAim);
                 //} else if (msg.obj instanceof NavigatorMemo) {
                 //} else if (msg.obj instanceof SignallerMemo) {
                 } else if (msg.obj instanceof ServerMemo) {
@@ -63,6 +68,11 @@ public class Server implements Runnable {
                         case DISCONNECT:
                             //Remove client from client list
                             final InetAddress address = (InetAddress) memo.getData();
+                            Iterator<Socket> socketIterator = mClients.keySet().iterator();
+                            while (socketIterator.hasNext()) {
+                                final Socket socket = socketIterator.next();
+                                if (socket.getInetAddress().equals(address)) socketIterator.remove();
+                            }
                             for (Socket socket : mClients.keySet()) {
                                 if (socket.getInetAddress().equals(address)) mClients.remove(socket);
                             }
@@ -109,12 +119,12 @@ public class Server implements Runnable {
                     Thread.sleep(63L);
                 }
             } catch (InterruptedException e) { Log.e(TAG, e.getMessage(), e); }
+            sendToClients(new ServerMemo(ServerMemo.Action.SHUTDOWN));
         } catch(IOException e) {
             Log.e(TAG, e.getMessage(), e);
         } finally {
             Log.i(TAG, "Shutdown");
             mHandlerThread.quitSafely();
-            sendToClients(new ServerMemo(ServerMemo.Action.SHUTDOWN));
             try {
                 for (ObjectOutputStream stream : mClients.values()) {
                     stream.close();
@@ -128,7 +138,9 @@ public class Server implements Runnable {
             try {
                 stream.writeObject(object);
                 stream.reset();
-            } catch (IOException e) { Log.e(TAG, e.getMessage(), e); }
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage(), e);
+            }
         }
     }
 }

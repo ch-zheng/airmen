@@ -17,7 +17,7 @@ import com.chzheng.airmen.R;
 public class KnobView extends View {
     private static final String TAG = "KnobView";
     private float mRotationAngle = 0; //Measured in degrees clockwise from north
-    private Bitmap mDialImage = BitmapFactory.decodeResource(getResources(), R.drawable.circlearrow);
+    private Bitmap mDialImage = BitmapFactory.decodeResource(getResources(), R.drawable.knob);
     private Paint mPaint = new Paint();
 
     public KnobView(Context context, AttributeSet attrs) {
@@ -27,7 +27,7 @@ public class KnobView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        mDialImage = Bitmap.createScaledBitmap(mDialImage, canvas.getWidth(), canvas.getHeight(), false);
+        mDialImage = Bitmap.createScaledBitmap(mDialImage, canvas.getWidth() + 1, canvas.getHeight() + 1, false);
         canvas.save();
         canvas.rotate(mRotationAngle, canvas.getWidth() / 2, canvas.getHeight() / 2);
         canvas.drawBitmap(mDialImage, 0, 0, mPaint);
@@ -37,8 +37,7 @@ public class KnobView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
-            final int[] center = new int[2];
-            getLocationOnScreen(center);
+            //I don't know how this works but it does
             mRotationAngle = ((float) Math.toDegrees(Math.atan2(event.getY() - getHeight() / 2, event.getX() - getWidth() / 2)) + 450) % 360;
             invalidate();
             return true;

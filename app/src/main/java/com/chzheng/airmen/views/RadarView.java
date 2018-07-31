@@ -8,13 +8,18 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.chzheng.airmen.R;
+import com.chzheng.airmen.game.Coordinates;
+import com.chzheng.airmen.game.Game;
+import com.chzheng.airmen.game.Interceptor;
+import com.chzheng.airmen.game.SerialEntity;
 import com.chzheng.airmen.memos.UpdateMemo;
 
 public class RadarView extends SurfaceView implements SurfaceHolder.Callback {
-    private static final String TAG = "MapView";
     private DrawThread mDrawThread = new DrawThread();
     private boolean mIsCreated = false;
 
@@ -54,20 +59,20 @@ public class RadarView extends SurfaceView implements SurfaceHolder.Callback {
         @Override
         protected void onLooperPrepared() {
             //Paint setup
-            final Paint backgroundPaint = new Paint(), backgroundPaint2 = new Paint(), framePaint = new Paint(), accentPaint = new Paint();
-            backgroundPaint.setColor(0xFFF5F5F5);
+            final Paint backgroundPaint = new Paint(), backgroundPaint2 = new Paint(), framePaint = new Paint(), foregroundPaint = new Paint();
+            backgroundPaint.setColor(getResources().getColor(R.color.colorBackground, null));
             backgroundPaint2.setColor(Color.BLACK);
-            framePaint.setColor(Color.GREEN);
+            framePaint.setColor(getResources().getColor(R.color.colorAccent, null));
             framePaint.setStyle(Paint.Style.STROKE);
-            accentPaint.setColor(Color.WHITE);
+            foregroundPaint.setColor(Color.WHITE);
             //Handler registration
             mHandler = new Handler(getLooper(), new Handler.Callback() {
                 @Override
                 public boolean handleMessage(Message msg) {
                     if (msg.obj instanceof UpdateMemo) {
                         final UpdateMemo memo = (UpdateMemo) msg.obj;
-                        //Canvas drawing
                         final Canvas canvas = getHolder().lockCanvas();
+                        //Draw radar frame
                         framePaint.setStrokeWidth((canvas.getWidth() + canvas.getHeight()) / 200);
                         canvas.drawPaint(backgroundPaint);
                         canvas.drawCircle(
@@ -76,8 +81,7 @@ public class RadarView extends SurfaceView implements SurfaceHolder.Callback {
                                 (canvas.getWidth() - framePaint.getStrokeWidth()) / 2,
                                 backgroundPaint2
                         );
-                        canvas.drawLine(canvas.getWidth() / 2, 0, canvas.getWidth() / 2, canvas.getHeight(), framePaint);
-                        canvas.drawLine(0, canvas.getHeight() / 2, canvas.getWidth(), canvas.getHeight() / 2, framePaint);
+                        //Draw concentric circles
                         final int circles = 4, radiusInterval = (canvas.getWidth() - (int) framePaint.getStrokeWidth()) / (circles * 2);
                         for (int i = circles; i > 0; i--) {
                             canvas.drawCircle(
@@ -87,12 +91,33 @@ public class RadarView extends SurfaceView implements SurfaceHolder.Callback {
                                     framePaint
                             );
                         }
-                        getHolder().unlockCanvasAndPost(canvas);
+                        //Draw azimuth markings
+                        canvas.save();
+                        for(int i = 0; i < 6; i++) {
+                            canvas.drawLine(0, canvas.getHeight() / 2, canvas.getWidth(), canvas.getHeight() / 2, framePaint);
+                            canvas.rotate(30, canvas.getWidth() / 2, canvas.getHeight() / 2);
+                        }
+                        canvas.restore();
+                        //Draw entities
                         canvas.save();
                         canvas.translate(0, canvas.getHeight());
                         canvas.scale(1, -1);
-                        canvas.rotate(memo.direction);
+                        canvas.translate(canvas.getWidth() / 2, canvas.getHeight() / 2);
+                        canvas.rotate(memo.bearing * -1, canvas.getWidth() / 2, canvas.getHeight() / 2);
+                        Coordinates center = memo.coordinates;
+                        for (SerialEntity entity : memo.entities) {
+                            if (entity.getType().equals(Interceptor.class.getName()) && Coordinates.distanceBetween(center, entity.getPosition()) < 4) {
+                                Coordinates relativePosition = Coordinates.relativePosition(center, entity.getPosition());
+                                canvas.drawCircle(
+                                        (float) relativePosition.getLongitude() * radiusInterval,
+                                        (float) relativePosition.getLatitude() * radiusInterval,
+                                        canvas.getWidth() / 40,
+                                        foregroundPaint
+                                );
+                            }
+                        }
                         canvas.restore();
+                        getHolder().unlockCanvasAndPost(canvas);
                     }
                     return false;
                 }

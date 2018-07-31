@@ -33,7 +33,7 @@ public class SignallerActivity extends AppCompatActivity {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setTitle(R.string.signaller);
         mRadarView = findViewById(R.id.radar);
-        mMessageList = (RecyclerView) findViewById(R.id.list);
+        mMessageList = findViewById(R.id.list);
         mMessageList.setHasFixedSize(true);
         mMessageList.setLayoutManager(new LinearLayoutManager(this));
         //Register Handler
@@ -44,7 +44,7 @@ public class SignallerActivity extends AppCompatActivity {
                     final UpdateMemo memo = (UpdateMemo) msg.obj;
                     if (System.currentTimeMillis() - mLastUpdateTime > 100) {
                         mRadarView.setUpdate(memo);
-                        //mMessageList.setAdapter(new MessagesAdapter(memo.messages));
+                        mMessageList.setAdapter(new MessagesAdapter(memo.messages));
                         mLastUpdateTime = System.currentTimeMillis();
                     }
                 } else if (msg.obj instanceof ServerMemo) {
@@ -68,8 +68,10 @@ public class SignallerActivity extends AppCompatActivity {
         @NonNull
         @Override
         public MessagesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            TextView view = new TextView(parent.getContext());
-            return new ViewHolder(view);
+            TextView textView = new TextView(parent.getContext());
+            textView.setHorizontallyScrolling(false);
+            textView.setAllCaps(true);
+            return new ViewHolder(textView);
         }
 
         @Override
