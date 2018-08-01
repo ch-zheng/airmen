@@ -97,7 +97,7 @@ public class Server implements Runnable {
         Log.i(TAG, "Server started");
         try (ServerSocket serverSocket = new ServerSocket(mServerPort)) {
             //Client connections
-            while(mClients.size() < 2 && !Thread.interrupted()) { //DEBUGGING: Lobby size modification
+            while(mClients.size() < 4 && !Thread.interrupted()) { //DEBUGGING: Lobby size modification
                 final Socket clientSocket = serverSocket.accept();
                 new Thread(new ServerListener(clientSocket)).start();
                 mClients.put(clientSocket, new ObjectOutputStream(clientSocket.getOutputStream()));

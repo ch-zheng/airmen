@@ -41,6 +41,7 @@
     <string name="landing_gear">Landing Gear</string>
     <string name="roll">Roll</string>
     <string name="eject">Eject</string>
+    <string name="integrity">Integrity</string>
     <!-- Bombardier Activity -->
     <string name="bombsight">Bombsight</string>
     <string name="height">Height</string>

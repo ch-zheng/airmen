@@ -64,7 +64,7 @@ public class RadarView extends SurfaceView implements SurfaceHolder.Callback {
             backgroundPaint2.setColor(Color.BLACK);
             framePaint.setColor(getResources().getColor(R.color.colorAccent, null));
             framePaint.setStyle(Paint.Style.STROKE);
-            foregroundPaint.setColor(Color.WHITE);
+            foregroundPaint.setColor(getResources().getColor(R.color.colorHighlight, null));
             //Handler registration
             mHandler = new Handler(getLooper(), new Handler.Callback() {
                 @Override

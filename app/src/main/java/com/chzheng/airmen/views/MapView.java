@@ -8,16 +8,19 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.chzheng.airmen.R;
+import com.chzheng.airmen.game.Coordinates;
 import com.chzheng.airmen.memos.UpdateMemo;
 
 public class MapView extends SurfaceView implements SurfaceHolder.Callback {
     private static final String TAG = "MapView";
     private DrawThread mDrawThread = new DrawThread();
     private boolean mIsCreated = false;
+    private Coordinates mMarkerPosition = new Coordinates(-1, -1);
 
     public MapView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -39,6 +42,15 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
         mIsCreated = false;
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
+            mMarkerPosition.setLatitude(event.getY());
+            mMarkerPosition.setLongitude(event.getX());
+            return true;
+        } else return false;
+    }
+
     public void setUpdate(UpdateMemo memo) {
         Message message = new Message();
         message.obj = memo;
@@ -55,11 +67,12 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
         @Override
         protected void onLooperPrepared() {
             //Canvas stuff
-            final Paint backgroundPaint = new Paint(), foregroundPaint = new Paint(), textPaint = new Paint();
+            final Paint backgroundPaint = new Paint(), foregroundPaint = new Paint(), textPaint = new Paint(), markerPaint = new Paint();
             backgroundPaint.setColor(getResources().getColor(R.color.colorPrimary, null));
             foregroundPaint.setColor(getResources().getColor(R.color.colorHighlight, null));
             textPaint.setColor(Color.WHITE);
             textPaint.setTextAlign(Paint.Align.CENTER);
+            markerPaint.setColor(Color.WHITE);
             final int[] elevationColors = {
                     0xFFC8E6C9, 0xFFA5D6A7, 0xFF81C784,
                     0xFF66BB6A, 0xFF4CAF50, 0xFF43A047,
@@ -112,6 +125,12 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
                         canvas.translate(longitudeLength * 4/3, latitudeLength * 4/3);
                         canvas.drawCircle(memo.longitude * longitudeLength, memo.latitude * latitudeLength, latitudeLength / 2, foregroundPaint);
                         canvas.restore();
+                        //Draw marker
+                        canvas.drawCircle(
+                                (float) mMarkerPosition.getLongitude(),
+                                (float) mMarkerPosition.getLatitude(),
+                                latitudeLength / 2, markerPaint
+                        );
                         getHolder().unlockCanvasAndPost(canvas);
                     }
                     return false;

@@ -71,7 +71,12 @@ public class Player implements Game.Entity {
         position.setLatitude(position.getLatitude() + Math.sin(Math.toRadians(-1 * bearing + 90)) * (airspeed / 3600) * delta);
         position.setLongitude(position.getLongitude() + Math.cos(Math.toRadians(-1 * bearing + 90)) * (airspeed / 3600) * delta);
         //Death conditions
-        return !(position.getLatitude() < 0 || position.getLatitude() > game.getMap().getLength() || position.getLongitude() < 0 || position.getLongitude() > game.getMap().getWidth());
+        return !(integrity < 0 ||
+                position.getLatitude() < 0 ||
+                position.getLatitude() > game.getMap().getLength() ||
+                position.getLongitude() < 0 ||
+                position.getLongitude() > game.getMap().getWidth()
+        );
     }
 
     public void damage(double damage, double delta) {

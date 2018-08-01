@@ -38,5 +38,5 @@ public class Interceptor implements Game.Entity {
     @Override
     public Coordinates getPosition() { return position; }
 
-    public void damage(double damage, double delta) { integrity -= damage * delta; Log.d(TAG, String.valueOf(integrity)); }
+    public void damage(double damage, double delta) { integrity -= damage * delta; }
 }

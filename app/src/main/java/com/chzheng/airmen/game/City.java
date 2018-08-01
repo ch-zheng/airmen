@@ -4,15 +4,17 @@ import java.util.Random;
 
 public class City implements Game.Entity {
     private final static String[] cityNames = {
-            "Moscow",
-            "Saint Petersberg",
-            "Novosibirsk",
-            "Yekaterinburg",
-            "Nizhny Novgorod",
-            "Kazan",
-            "Chelyabinsk",
-            "Omsk",
-            "Samara"
+            //Kazakh cities
+            "Almaty",
+            "Shymkent",
+            "Karagandy",
+            "Taraz",
+            "Astana",
+            "Pavlodar",
+            "Oskemen",
+            "Semey",
+            "Aktobe",
+            "Kostanay"
     };
     private Game game;
     private Coordinates position;
