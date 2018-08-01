@@ -25,7 +25,7 @@ public class Server implements Runnable {
     public static Handler sHandler;
     private HandlerThread mHandlerThread = new HandlerThread(TAG);
     private int mServerPort;
-    private volatile LinkedHashMap<Socket, ObjectOutputStream> mClients = new LinkedHashMap<>();
+    private final LinkedHashMap<Socket, ObjectOutputStream> mClients = new LinkedHashMap<>();
     private final Game mGameState = new Game();
 
     public Server(int port) {
@@ -58,8 +58,10 @@ public class Server implements Runnable {
                                 for (Socket socket : mClients.keySet()) {
                                     if (socket.getInetAddress().equals(address)) {
                                         final String role = roleAssignments.get(address).toString();
-                                        try { mClients.get(socket).writeObject(new ServerMemo(ServerMemo.Action.ROLE, role)); }
-                                        catch (IOException e) { Log.e(TAG, e.getMessage(), e); }
+                                        synchronized (mClients) {
+                                            try { mClients.get(socket).writeObject(new ServerMemo(ServerMemo.Action.ROLE, role)); }
+                                            catch (IOException e) { Log.e(TAG, e.getMessage(), e); }
+                                        }
                                         break;
                                     }
                                 }
@@ -134,12 +136,14 @@ public class Server implements Runnable {
     }
 
     private void sendToClients(Object object) {
-        for (ObjectOutputStream stream : mClients.values()) {
-            try {
-                stream.writeObject(object);
-                stream.reset();
-            } catch (IOException e) {
-                Log.e(TAG, e.getMessage(), e);
+        synchronized (mClients) {
+            for (ObjectOutputStream stream : mClients.values()) {
+                try {
+                    stream.writeObject(object);
+                    stream.reset();
+                } catch (IOException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                }
             }
         }
     }

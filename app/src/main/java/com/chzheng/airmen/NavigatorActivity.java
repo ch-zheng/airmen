@@ -28,7 +28,12 @@ public class NavigatorActivity extends AppCompatActivity {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setTitle(R.string.navigator);
         mMapView = findViewById(R.id.map);
-        //Handler registration
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         sHandler = new Handler(getMainLooper(), new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
@@ -50,5 +55,11 @@ public class NavigatorActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        sHandler = new Handler(Looper.getMainLooper());
     }
 }

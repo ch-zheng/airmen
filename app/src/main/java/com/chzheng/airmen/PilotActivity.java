@@ -33,6 +33,29 @@ public class PilotActivity extends AppCompatActivity {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_pilot);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setTitle(R.string.pilot);
+        findViewById(R.id.slider_throttle).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                ((TextView) findViewById(R.id.indicator_throttle)).setText(
+                        String.valueOf(((SeekBar) findViewById(R.id.slider_throttle)).getProgress())
+                );
+                return false;
+            }
+        });
+        findViewById(R.id.slider_altitude).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                ((TextView) findViewById(R.id.indicator_set_altitude)).setText(
+                        String.valueOf(((SeekBar) findViewById(R.id.slider_altitude)).getProgress())
+                );
+                return false;
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         //Register Handler
         sHandler = new Handler(getMainLooper(), new Handler.Callback() {
             @Override
@@ -54,24 +77,13 @@ public class PilotActivity extends AppCompatActivity {
                 return false;
             }
         });
-        findViewById(R.id.slider_throttle).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                ((TextView) findViewById(R.id.indicator_throttle)).setText(
-                        String.valueOf(((SeekBar) findViewById(R.id.slider_throttle)).getProgress())
-                );
-                return false;
-            }
-        });
-        findViewById(R.id.slider_altitude).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                ((TextView) findViewById(R.id.indicator_set_altitude)).setText(
-                        String.valueOf(((SeekBar) findViewById(R.id.slider_altitude)).getProgress())
-                );
-                return false;
-            }
-        });
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        sHandler = new Handler(Looper.getMainLooper());
     }
 
     @Override

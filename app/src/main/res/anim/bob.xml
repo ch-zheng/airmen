@@ -6,7 +6,7 @@
     android:shareInterpolator="true">
     <translate
         android:fromYDelta="0"
-        android:toYDelta="50"
+        android:toYDelta="80"
         android:duration="2000"
         android:repeatCount="infinite"/>
 </set>

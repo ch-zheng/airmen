@@ -94,7 +94,7 @@ public class RadarView extends SurfaceView implements SurfaceHolder.Callback {
                         //Draw azimuth markings
                         canvas.save();
                         for(int i = 0; i < 6; i++) {
-                            canvas.drawLine(0, canvas.getHeight() / 2, canvas.getWidth(), canvas.getHeight() / 2, framePaint);
+                            canvas.drawLine(framePaint.getStrokeWidth(), canvas.getHeight() / 2, canvas.getWidth() - framePaint.getStrokeWidth(), canvas.getHeight() / 2, framePaint);
                             canvas.rotate(30, canvas.getWidth() / 2, canvas.getHeight() / 2);
                         }
                         canvas.restore();
@@ -103,7 +103,7 @@ public class RadarView extends SurfaceView implements SurfaceHolder.Callback {
                         canvas.translate(0, canvas.getHeight());
                         canvas.scale(1, -1);
                         canvas.translate(canvas.getWidth() / 2, canvas.getHeight() / 2);
-                        canvas.rotate(memo.bearing * -1, canvas.getWidth() / 2, canvas.getHeight() / 2);
+                        canvas.rotate(memo.bearing);
                         Coordinates center = memo.coordinates;
                         for (SerialEntity entity : memo.entities) {
                             if (entity.getType().equals(Interceptor.class.getName()) && Coordinates.distanceBetween(center, entity.getPosition()) < 4) {

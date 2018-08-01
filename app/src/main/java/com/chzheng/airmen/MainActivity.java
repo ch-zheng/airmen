@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         //TODO: Kill running server/client instances
+        //As of now, new games require restarting the app
     }
 
     public void begin(View view) {

@@ -46,6 +46,11 @@ public class OwnerActivity extends AppCompatActivity {
                 catch (UnknownHostException e) { Log.e(TAG, e.getMessage(), e); }
             }
         }).start();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         //Handler
         sHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
             @Override
@@ -70,16 +75,24 @@ public class OwnerActivity extends AppCompatActivity {
                             startActivity(new Intent(OwnerActivity.this, activity));
                             break;
                         case SHUTDOWN:
+                            Log.d(TAG, "Shutdown memo");
                             startActivity(new Intent(OwnerActivity.this, MainActivity.class));
                             break;
                     }
                 } else if (msg.obj instanceof java.lang.Exception) {
+                    Log.d(TAG, "Exception memo");
                     Toast.makeText(OwnerActivity.this, R.string.connection_error, Toast.LENGTH_LONG).show();
                     startActivity(new Intent(OwnerActivity.this, MainActivity.class));
                 }
                 return false;
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        sHandler = new Handler(Looper.getMainLooper());
     }
 
     public void startGame(View view) {

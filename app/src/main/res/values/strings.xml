@@ -45,16 +45,12 @@
     <string name="bombsight">Bombsight</string>
     <string name="height">Height</string>
     <string name="distance">Distance</string>
-    <string name="windspeed">Windspeed</string>
-    <string name="wind_direction">Wind Direction</string>
     <string name="calculate">Calculate</string>
-    <string name="distance_to_launch">Distance to Launch</string>
+    <string name="launch_point">Launch Point</string>
     <string name="arm">Arm</string>
-    <string name="arming">
-        Arming&#8230; <xliff:g id="countdown">%1$d</xliff:g>
-    </string>
     <string name="disarm">Disarm</string>
     <string name="launch">Launch</string>
+    <string name="bomb_dropped">Bomb Dropped</string>
     <string name="turret">Turret</string>
     <!-- Navigator Activity -->
     <string name="coordinates">Coordinates</string>

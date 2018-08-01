@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.chzheng.airmen.R;
 import com.chzheng.airmen.memos.UpdateMemo;
 
 public class MapView extends SurfaceView implements SurfaceHolder.Callback {
@@ -45,7 +46,7 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     private class DrawThread extends HandlerThread {
-        private Handler mHandler;
+        private Handler mHandler = new Handler();
 
         public DrawThread() {
             super("Draw thread");
@@ -55,8 +56,8 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
         protected void onLooperPrepared() {
             //Canvas stuff
             final Paint backgroundPaint = new Paint(), foregroundPaint = new Paint(), textPaint = new Paint();
-            backgroundPaint.setColor(Color.BLACK);
-            foregroundPaint.setColor(Color.RED);
+            backgroundPaint.setColor(getResources().getColor(R.color.colorPrimary, null));
+            foregroundPaint.setColor(getResources().getColor(R.color.colorHighlight, null));
             textPaint.setColor(Color.WHITE);
             textPaint.setTextAlign(Paint.Align.CENTER);
             final int[] elevationColors = {

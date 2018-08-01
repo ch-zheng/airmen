@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.chzheng.airmen.memos.ServerMemo;
@@ -24,6 +25,14 @@ public class ClientActivity extends AppCompatActivity {
         setContentView(R.layout.activity_client);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setTitle(R.string.client);
+        final InetAddress address = (InetAddress) getIntent().getSerializableExtra(String.valueOf(R.id.address));
+        final int port = getIntent().getIntExtra(String.valueOf(R.id.port), -1);
+        new Thread(new Client(address, port)).start();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         sHandler = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
@@ -41,17 +50,22 @@ public class ClientActivity extends AppCompatActivity {
                             startActivity(new Intent(ClientActivity.this, activity));
                             break;
                         case SHUTDOWN:
+                            Log.d(TAG, "Shutdown memo");
                             startActivity(new Intent(ClientActivity.this, MainActivity.class));
                             break;
                     }
                 } else if (msg.obj instanceof java.lang.Exception) {
+                    Log.d(TAG, "Exception memo");
                     Toast.makeText(ClientActivity.this, R.string.connection_error, Toast.LENGTH_LONG).show();
                     startActivity(new Intent(ClientActivity.this, MainActivity.class));
                 }
             }
         };
-        final InetAddress address = (InetAddress) getIntent().getSerializableExtra(String.valueOf(R.id.address));
-        final int port = getIntent().getIntExtra(String.valueOf(R.id.port), -1);
-        new Thread(new Client(address, port)).start();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        sHandler = new Handler(Looper.getMainLooper());
     }
 }

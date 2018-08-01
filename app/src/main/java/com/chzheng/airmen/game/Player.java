@@ -8,7 +8,7 @@ public class Player implements Game.Entity {
     private static final String TAG = "Player";
     private Game game;
     //Specifications (Units: speed in knots, altitude in feet, rotation in degrees clockwise from north)
-    private static final int MAX_SPEED = 200, TAXI_SPEED = 20, CEILING = 900, FIREPOWER = 10, TURRET_AUTOAIM = 60, TURRET_RANGE = 3;
+    private static final int MAX_SPEED = 200, TAXI_SPEED = 20, CEILING = 900, FIREPOWER = 5, TURRET_AUTOAIM = 60, TURRET_RANGE = 3;
     private static final int ACCELERATION = 20, TAXI_ACCELERATION = 2, RATE_OF_CLIMB = 50, RATE_OF_TURN = 6;
     private static final int DRAG = 10, GRAVITY = 10;
     //Physical variables
@@ -29,7 +29,6 @@ public class Player implements Game.Entity {
     public boolean update(double delta, double previousDelta) {
         //Fire guns
         final double turretBearing = (turretAim + bearing) % 360;
-        Log.d(TAG, String.valueOf(turretBearing));
         for (Game.Entity entity : game.getEntities()) {
             if (entity instanceof Interceptor &&
                     Coordinates.distanceBetween(entity.getPosition(), position) < TURRET_RANGE &&
@@ -78,6 +77,7 @@ public class Player implements Game.Entity {
     public void damage(double damage, double delta) {
         integrity -= damage * delta;
         if (armed && new Random().nextDouble() < delta / 20) integrity = 0;
+        Log.d(TAG, String.valueOf(integrity));
     }
 
     public void launch() {
