@@ -16,150 +16,139 @@
             android:background="?attr/colorPrimary"
             android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/label_bombsight"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
-        <TextView
-            android:id="@+id/label_bombsight"
+        <!-- Bombsight -->
+        <android.support.v7.widget.CardView
+            android:id="@+id/bombsight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@string/bombsight"
-            android:textSize="16sp"
+            android:layout_margin="16dp"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
-            app:layout_constraintBottom_toTopOf="@id/divider"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="4dp"
-            app:layout_constraintTop_toBottomOf="@id/label_bombsight"
-            app:layout_constraintBottom_toTopOf="@id/edit_airspeed"/>
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/edit_airspeed"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            app:layout_constraintTop_toBottomOf="@id/divider"
-            app:layout_constraintBottom_toTopOf="@id/edit_latitude"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/edit_height">
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/edit_airspeed_field"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="number"
-                android:hint="@string/airspeed"/>
-        </android.support.design.widget.TextInputLayout>
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/edit_height"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/divider"
-            app:layout_constraintBottom_toTopOf="@id/edit_longitude"
-            app:layout_constraintStart_toEndOf="@id/edit_airspeed"
-            app:layout_constraintEnd_toStartOf="@id/edit_bearing">
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/edit_height_field"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="number"
-                android:hint="@string/height"/>
-        </android.support.design.widget.TextInputLayout>
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/edit_bearing"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintTop_toBottomOf="@id/divider"
-            app:layout_constraintBottom_toTopOf="@id/edit_latitude"
-            app:layout_constraintStart_toEndOf="@id/edit_height"
             app:layout_constraintEnd_toEndOf="parent">
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/edit_bearing_field"
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="number"
-                android:hint="@string/bearing"/>
-        </android.support.design.widget.TextInputLayout>
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/edit_latitude"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            app:layout_constraintTop_toBottomOf="@id/edit_airspeed"
-            app:layout_constraintBottom_toTopOf="@id/button_calculate"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/edit_longitude">
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/edit_latitude_field"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="number"
-                android:hint="@string/latitude"/>
-        </android.support.design.widget.TextInputLayout>
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/edit_longitude"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintTop_toBottomOf="@id/edit_height"
-            app:layout_constraintBottom_toTopOf="@id/button_calculate"
-            app:layout_constraintStart_toEndOf="@id/edit_latitude"
-            app:layout_constraintEnd_toEndOf="parent">
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/edit_longitude_field"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="number"
-                android:hint="@string/longitude"/>
-        </android.support.design.widget.TextInputLayout>
-        <Button
-            android:id="@+id/button_calculate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@string/calculate"
-            android:onClick="calculate"
-            app:layout_constraintTop_toBottomOf="@id/edit_latitude"
-            app:layout_constraintBottom_toTopOf="@id/divider2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_weight="0"
-            android:theme="@style/ThemeOverlay.AppCompat.Light"/>
-        <TextView
-            android:id="@+id/indicator_release"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:gravity="center"
-            android:text='@{String.format("%1$.3f, %2$.3f", coordinates.latitude, coordinates.longitude), default="0, 0"}'
-            style="@style/Indicator"
-            app:layout_constraintTop_toTopOf="@id/button_calculate"
-            app:layout_constraintBottom_toBottomOf="@id/button_calculate"
-            app:layout_constraintStart_toEndOf="@id/button_calculate"
-            app:layout_constraintEnd_toEndOf="parent"/>
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="32dp"
-            app:layout_constraintTop_toBottomOf="@id/button_calculate"
-            app:layout_constraintBottom_toTopOf="@id/button_launch"/>
+                android:padding="8dp">
+                <TextView
+                    android:id="@+id/label_bombsight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/bombsight"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/edit_airspeed"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/label_bombsight"
+                    app:layout_constraintEnd_toStartOf="@id/edit_height"
+                    app:layout_constraintStart_toStartOf="parent">
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/edit_airspeed_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="number"
+                        android:hint="@string/airspeed"/>
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/edit_height"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/label_bombsight"
+                    app:layout_constraintStart_toEndOf="@id/edit_airspeed"
+                    app:layout_constraintEnd_toStartOf="@id/edit_bearing">
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/edit_height_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="number"
+                        android:hint="@string/height"/>
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/edit_bearing"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/label_bombsight"
+                    app:layout_constraintStart_toEndOf="@id/edit_height"
+                    app:layout_constraintEnd_toEndOf="parent">
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/edit_bearing_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="number"
+                        android:hint="@string/bearing"/>
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/edit_latitude"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/edit_airspeed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/edit_longitude">
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/edit_latitude_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="number"
+                        android:hint="@string/latitude"/>
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/edit_longitude"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/edit_height"
+                    app:layout_constraintStart_toEndOf="@id/edit_latitude"
+                    app:layout_constraintEnd_toEndOf="parent">
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/edit_longitude_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="number"
+                        android:hint="@string/longitude"/>
+                </android.support.design.widget.TextInputLayout>
+                <Button
+                    android:id="@+id/button_calculate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/calculate"
+                    android:onClick="calculate"
+                    app:layout_constraintTop_toBottomOf="@id/edit_latitude"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:theme="@style/ThemeOverlay.AppCompat.Light"/>
+                <TextView
+                    android:id="@+id/indicator_release"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="center"
+                    android:text='@{String.format("%1$.3f, %2$.3f", coordinates.latitude, coordinates.longitude), default="0, 0"}'
+                    style="@style/Indicator"
+                    app:layout_constraintTop_toTopOf="@id/button_calculate"
+                    app:layout_constraintBottom_toBottomOf="@id/button_calculate"
+                    app:layout_constraintStart_toEndOf="@id/button_calculate"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"/>
+            </android.support.constraint.ConstraintLayout>
+        </android.support.v7.widget.CardView>
+        <!-- Others -->
         <Button
             android:id="@+id/button_launch"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="@string/launch"
             android:enabled="false"
             android:onClick="onButtonClick"
             android:drawableBottom="@drawable/ic_call_received_black_24dp"
-            app:layout_constraintTop_toBottomOf="@id/divider2"
-            app:layout_constraintBottom_toTopOf="@id/button_launch"
+            app:layout_constraintTop_toBottomOf="@id/bombsight"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/knob_aim_turret"
-            app:layout_constraintDimensionRatio="1:1"
             android:theme="@style/ThemeOverlay.AppCompat.Light"/>
         <Button
             android:id="@+id/button_arm"
@@ -175,10 +164,20 @@
             android:id="@+id/knob_aim_turret"
             android:layout_width="128dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/divider2"
-            app:layout_constraintBottom_toBottomOf="@id/button_arm"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/bombsight"
             app:layout_constraintStart_toEndOf="@id/button_launch"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintDimensionRatio="1:1"/>
+        <TextView
+            android:id="@+id/label_turret"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/turret"
+            style="@style/Label"
+            app:layout_constraintTop_toBottomOf="@id/knob_aim_turret"
+            app:layout_constraintStart_toStartOf="@id/knob_aim_turret"
+            app:layout_constraintEnd_toEndOf="@id/knob_aim_turret"/>
     </android.support.constraint.ConstraintLayout>
 </layout>

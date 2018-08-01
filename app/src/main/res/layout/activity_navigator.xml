@@ -71,6 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="@string/latitude"
+            style="@style/Label"
             app:layout_constraintTop_toBottomOf="@id/indicator_latitude"
             app:layout_constraintStart_toStartOf="@id/indicator_latitude"
             app:layout_constraintEnd_toEndOf="@id/indicator_latitude"/>
@@ -80,6 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="@string/longitude"
+            style="@style/Label"
             app:layout_constraintTop_toBottomOf="@id/indicator_longitude"
             app:layout_constraintStart_toStartOf="@id/indicator_longitude"
             app:layout_constraintEnd_toEndOf="@id/indicator_longitude"/>
@@ -89,6 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="@string/elevation"
+            style="@style/Label"
             app:layout_constraintTop_toBottomOf="@id/indicator_elevation"
             app:layout_constraintStart_toStartOf="@id/indicator_elevation"
             app:layout_constraintEnd_toEndOf="@id/indicator_elevation"/>

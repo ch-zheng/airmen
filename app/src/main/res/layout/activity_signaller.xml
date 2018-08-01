@@ -34,6 +34,7 @@
         android:gravity="center_horizontal"
         android:text="@string/radio"
         android:background="?attr/colorPrimaryDark"
+        style="@style/Label"
         app:layout_constraintTop_toBottomOf="@id/radar"
         app:layout_constraintBottom_toTopOf="@id/list"
         app:layout_constraintStart_toStartOf="parent"
